@@ -384,6 +384,7 @@ Icon
 .Trashes
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
+pnpm-lock.yaml
 
 # Directories potentially created on remote AFP share
 .AppleDB

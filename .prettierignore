@@ -1,0 +1,6 @@
+**/dist/*
+**/.local
+**/node_modules/**
+.eslintcache
+types
+coverage

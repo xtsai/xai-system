@@ -1,0 +1,87 @@
+{
+  "name": "@xtsai/system",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "author": "lanbery<lanbery@gmail.com>",
+  "license": "LICENSE",
+  "description": "xtsai library system",
+  "scripts": {
+    "postinstall": "npx only-allow pnpm",
+    "prebuild": "pnpm clean && pnpm lint",
+    "build": "pnpm build:pkg",
+    "build:pkg": "tsc --build --verbose --force tsconfig.pkg.json",
+    "commitlint": "commitlint --config commitlint.config.ts -e -v",
+    "clean": "rm -rf dist/*",
+    "format": "prettier --write .",
+    "lint": "eslint \"{src,test}/**/*.ts\" --fix",
+    "lint-staged": "lint-staged",
+    "test": "jest --config jest.config.ts --runInBand --coverage --verbose",
+    "push:changelog": "node build/scripts/push-changelog.mjs",
+    "prepare": "husky"
+  },
+  "keywords": [
+    "xtsai",
+    "system"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://github.com/xtsai/xai-system/README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https//github.com:xtsai/xai-system.git"
+  },
+  "dependencies": {
+    "@nestjs/common": "10.0.0"
+  },
+  "devDependencies": {
+    "@changesets/changelog-git": "^0.2.1",
+    "@changesets/cli": "^2.28.1",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@eslint/eslintrc": "3.2.0",
+    "@eslint/js": "9.18.0",
+    "@nestjs/cli": "^10.0.0",
+    "@nestjs/schematics": "^10.0.0",
+    "@nestjs/testing": "^10.0.0",
+    "@tsailab/schematics": "^1.2.7",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.10",
+    "@types/supertest": "^6.0.2",
+    "@typescript-eslint/parser": "^8.26.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "10.0.1",
+    "eslint-plugin-prettier": "5.2.3",
+    "globals": "15.14.0",
+    "husky": "^9.1.7",
+    "jest": "29.5.0",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
+    "source-map-support": "0.5.21",
+    "supertest": "7.0.0",
+    "ts-jest": "29.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "5.6.2",
+    "typescript-eslint": "8.20.0"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,json,html,vue,jsx,scss,less,css}": [
+      "prettier \"**/**/*.{ts,js,json,tsx,mjs,vue,scss,less,css,html}\" --ignore-path ./.prettierignore --write"
+    ],
+    "*.{js,ts,tsx,json,html,vue,jsx}": [
+      "pnpm run lint"
+    ]
+  },
+  "engines": {
+    "npm": ">=10.0.0",
+    "node": ">=20.0.0"
+  }
+}
