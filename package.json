@@ -24,7 +24,7 @@
     "test": "jest --config jest.config.ts --runInBand --coverage --verbose --passWithNoTests",
     "test:e2e": "jest --config ./test/jest-e2e.json --runInBand --coverage --verbose --passWithNoTests",
     "release:only": "changeset publish --registry=https://registry.npmjs.com",
-    "prerelease": "pnpm lint",
+    "prerelease": "pnpm build",
     "release": "pnpm release:only",
     "postrelease": "pnpm push:changelog",
     "push:changelog": "node build/scripts/push-changelog.mjs",
