@@ -1,5 +1,11 @@
 # @xtsai/system
 
+## 0.0.3
+
+### Patch Changes
+
+- Features: category tree nodes
+
 ## 0.0.2
 
 ### Patch Changes
