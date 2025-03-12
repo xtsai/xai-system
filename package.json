@@ -1,6 +1,6 @@
 {
   "name": "@xtsai/system",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -23,6 +23,10 @@
     "lint-staged": "lint-staged",
     "test": "jest --config jest.config.ts --runInBand --coverage --verbose --passWithNoTests",
     "test:e2e": "jest --config ./test/jest-e2e.json --runInBand --coverage --verbose --passWithNoTests",
+    "release:only":"changeset publish --registry=https://registry.npmjs.com",
+    "prerelease":"pnpm lint",
+    "release":"pnpm release:only",
+    "postrelease":"pnpm push:changelog",
     "push:changelog": "node build/scripts/push-changelog.mjs",
     "prepare": "husky"
   },

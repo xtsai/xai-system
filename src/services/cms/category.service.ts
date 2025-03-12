@@ -7,7 +7,11 @@ import {
   UpdateSortnoModel,
   UpdateStatusModel,
 } from '@xtsai/core';
-import { PageEnum, ROOT_TRRE_NODE_PID } from '@tsailab/core-types';
+import {
+  PageEnum,
+  ROOT_TRRE_NODE_PID,
+  TreeNodeOptionType,
+} from '@tsailab/core-types';
 import { ErrorCodeEnum, RandomNoType, RandomUtil } from '@xtsai/xai-utils';
 import { CreateCategoryModel, UpdateCategoryModel } from '../../model';
 import { Injectable } from '@nestjs/common';
@@ -140,6 +144,87 @@ export class CategoryService {
       .execute();
 
     return affected > 0;
+  }
+
+  async getCommonTreeNodes(rootPid: number = ROOT_TRRE_NODE_PID) {
+    const qb = this.categoryRepository.createQueryBuilder('cate');
+    const rootEntities = await qb
+      .andWhere('pid = :pid', { pid: rootPid })
+      .orderBy('sortno', 'ASC')
+      .addOrderBy('title', 'ASC')
+      .getMany();
+
+    const treeNodes: TreeNodeOptionType[] = [];
+    if (!rootEntities?.length) return treeNodes;
+
+    for (let i = 0; i < rootEntities.length; i++) {
+      let rootNode = CategoryEntity.entity2TreeNode(rootEntities[i]);
+
+      rootNode = await this.subTreeNodes(rootNode);
+      treeNodes.push(rootNode);
+    }
+
+    return treeNodes;
+  }
+
+  async subTreeNodes(node: TreeNodeOptionType): Promise<TreeNodeOptionType> {
+    const pid = node.id;
+    const qb = this.categoryRepository.createQueryBuilder('scate');
+
+    const subEntities = await qb
+      .where({ pid })
+      .orderBy('sortno', 'ASC')
+      .addOrderBy('title', 'ASC')
+      .getMany();
+    if (!subEntities?.length) {
+      node.children = [];
+      node.isLeaf = true;
+      return node;
+    }
+    if (!node.children) node.children = [];
+
+    for (let j = 0; j < subEntities.length; j++) {
+      const subNode = CategoryEntity.entity2TreeNode(subEntities[j]);
+      node.children.push(subNode);
+
+      await this.subTreeNodes(subNode);
+    }
+    return node;
+  }
+
+  async subList(queryDto: QueryOptionsDto, pid: number) {
+    const {
+      page = PageEnum.PAGE_NUMBER,
+      pageSize = PageEnum.PAGE_SIZE,
+      keywords,
+    } = queryDto;
+
+    let qb = this.categoryRepository.createQueryBuilder('cate').where({ pid });
+
+    if (keywords?.trim()?.length) {
+      qb = qb.andWhere(
+        'title LIKE :title OR tag LIKE :tag OR group LIKE :group',
+        {
+          title: `%${keywords.trim()}%`,
+          tag: `%${keywords.trim()}%`,
+          group: `${keywords.trim()}%`,
+        },
+      );
+    }
+
+    qb = qb.orderBy('sortno', 'ASC').addOrderBy('title', 'ASC');
+
+    const [data, total] = await qb
+      .skip((page - 1) * pageSize)
+      .take(pageSize)
+      .getManyAndCount();
+
+    return {
+      page,
+      pageSize,
+      total,
+      list: data ?? [],
+    };
   }
 
   createNo(): RandomNoType {

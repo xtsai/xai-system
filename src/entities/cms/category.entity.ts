@@ -1,3 +1,4 @@
+import { StatusEnum, TreeNodeOptionType } from '@tsailab/core-types';
 import { BaseSimpleEntity } from '@xtsai/core';
 import { Transform, Type } from 'class-transformer';
 import { Column, Entity, Index } from 'typeorm';
@@ -142,4 +143,27 @@ export class CategoryEntity extends BaseSimpleEntity {
   remark: string;
 
   children: CategoryEntity[];
+
+  static entity2TreeNode(entity: CategoryEntity): TreeNodeOptionType {
+    const { id, pid, cateno, title, icon, status, sortno, tag, group, uuid } =
+      entity;
+
+    const node: TreeNodeOptionType = {
+      id,
+      pid,
+      key: id,
+      label: title,
+      disabled: status === StatusEnum.FORBIDDEN,
+      extra: {
+        uuid,
+        cateno,
+        icon,
+        sortno,
+        tag,
+        group,
+      },
+    };
+
+    return node;
+  }
 }
