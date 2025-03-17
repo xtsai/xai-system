@@ -43,7 +43,7 @@
     "url": "git+https//github.com:xtsai/xai-system.git"
   },
   "dependencies": {
-    "@tsailab/core-types": "^0.2.2",
+    "@tsailab/core-types": "^0.2.3",
     "@xtsai/core": "^1.0.2",
     "@xtsai/xai-utils": "^0.1.0"
   },

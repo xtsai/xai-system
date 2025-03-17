@@ -8,9 +8,9 @@ import {
   UpdateStatusModel,
 } from '@xtsai/core';
 import {
+  CommTreeNode,
   PageEnum,
   ROOT_TRRE_NODE_PID,
-  TreeNodeOptionType,
 } from '@tsailab/core-types';
 import { ErrorCodeEnum, RandomNoType, RandomUtil } from '@xtsai/xai-utils';
 import { CreateCategoryModel, UpdateCategoryModel } from '../../model';
@@ -146,6 +146,81 @@ export class CategoryService {
     return affected > 0;
   }
 
+  /**
+   * 上移 tree node
+   * @param id node id
+   * @returns array which update nodes entities or zero array
+   */
+  async moveUpNode(id: number): Promise<Array<CategoryEntity>> {
+    const updateNodes: Array<CategoryEntity> = [];
+
+    const selfNode = await this.getById(id);
+    if (!selfNode) return updateNodes;
+
+    const items = await this.categoryRepository
+      .createQueryBuilder('cate')
+      .where({
+        pid: selfNode.pid,
+      })
+      .andWhere('sortno <=: sortno', { sortno: selfNode.sortno })
+      .orderBy('sortno', 'ASC')
+      .addOrderBy('id', 'ASC')
+      .limit(2)
+      .getMany();
+
+    if (items.length < 2) return updateNodes;
+
+    let [prevous, current] = items;
+
+    const prevousSortno = prevous.sortno;
+    prevous.sortno = current.sortno;
+
+    current.sortno = prevousSortno;
+
+    prevous = await this.categoryRepository.save(prevous);
+    current = await this.categoryRepository.save(current);
+
+    updateNodes.push(current);
+    updateNodes.push(prevous);
+
+    return updateNodes;
+  }
+
+  async moveDownNode(id: number): Promise<Array<CategoryEntity>> {
+    const updateNodes: Array<CategoryEntity> = [];
+
+    const selfNode = await this.getById(id);
+    if (!selfNode) return updateNodes;
+
+    const items = await this.categoryRepository
+      .createQueryBuilder('cate')
+      .where({
+        pid: selfNode.pid,
+      })
+      .andWhere('sortno >=: sortno', { sortno: selfNode.sortno })
+      .orderBy('sortno', 'DESC')
+      .addOrderBy('id', 'DESC')
+      .limit(2)
+      .getMany();
+
+    if (items.length < 2) return updateNodes;
+
+    let [current, prevous] = items;
+
+    const prevousSortno = prevous.sortno;
+    prevous.sortno = current.sortno;
+
+    current.sortno = prevousSortno;
+
+    prevous = await this.categoryRepository.save(prevous);
+    current = await this.categoryRepository.save(current);
+
+    updateNodes.push(prevous);
+    updateNodes.push(current);
+
+    return updateNodes;
+  }
+
   async getCommonTreeNodes(rootPid: number = ROOT_TRRE_NODE_PID) {
     const qb = this.categoryRepository.createQueryBuilder('cate');
     const rootEntities = await qb
@@ -154,7 +229,7 @@ export class CategoryService {
       .addOrderBy('title', 'ASC')
       .getMany();
 
-    const treeNodes: TreeNodeOptionType[] = [];
+    const treeNodes: CommTreeNode[] = [];
     if (!rootEntities?.length) return treeNodes;
 
     for (let i = 0; i < rootEntities.length; i++) {
@@ -167,7 +242,7 @@ export class CategoryService {
     return treeNodes;
   }
 
-  async subTreeNodes(node: TreeNodeOptionType): Promise<TreeNodeOptionType> {
+  async subTreeNodes(node: CommTreeNode): Promise<CommTreeNode> {
     const pid = node.id;
     const qb = this.categoryRepository.createQueryBuilder('scate');
 
@@ -182,6 +257,7 @@ export class CategoryService {
       return node;
     }
     if (!node.children) node.children = [];
+    node.isLeaf = false;
 
     for (let j = 0; j < subEntities.length; j++) {
       const subNode = CategoryEntity.entity2TreeNode(subEntities[j]);
