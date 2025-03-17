@@ -1,5 +1,11 @@
 # @xtsai/system
 
+## 0.0.4
+
+### Patch Changes
+
+- add move node
+
 ## 0.0.3
 
 ### Patch Changes
