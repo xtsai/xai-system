@@ -14,6 +14,7 @@ async function main() {
     await execSync(commandCommit, { stdio: 'inherit' });
   } catch (ex) {
     globalThis.console.error(ex);
+    await execSync(commandCommit, { stdio: 'inherit' });
   }
 }
 
