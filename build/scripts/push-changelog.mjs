@@ -9,12 +9,14 @@ async function main() {
 
   const commandAdd = `git add .`;
   const commandCommit = `git commit -am "chore(): release v${pkg.version}"`;
+  const commandPush = `git push`
   try {
     await execSync(commandAdd, { stdio: 'inherit' });
     await execSync(commandCommit, { stdio: 'inherit' });
   } catch (ex) {
     globalThis.console.error(ex);
-    await execSync(commandCommit, { stdio: 'inherit' });
+  }finally {
+    await execSync(commandPush, { stdio: 'inherit' });
   }
 }
 
