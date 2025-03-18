@@ -1,5 +1,11 @@
 # @xtsai/system
 
+## 0.0.5
+
+### Patch Changes
+
+- #Bug category query
+
 ## 0.0.4
 
 ### Patch Changes
