@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { CategoryEntity } from '../../entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -41,14 +41,17 @@ export class CategoryService {
 
     let qb = this.categoryRepository.createQueryBuilder('cate');
     if (keywords?.trim()?.length) {
-      qb = qb.where('title LIKE :title OR tag LIKE :tag OR group LIKE :group', {
-        title: `%${keywords.trim()}%`,
-        tag: `%${keywords.trim()}%`,
-        group: `${keywords.trim()}%`,
-      });
+      qb = qb.where(
+        '(cate.title LIKE :title OR cate.tag LIKE :tag OR cate.group LIKE :group)',
+        {
+          title: `%${keywords.trim()}%`,
+          tag: `%${keywords.trim()}%`,
+          group: `${keywords.trim()}%`,
+        },
+      );
     }
 
-    qb = qb.orderBy('sortno', 'ASC').addOrderBy('title', 'ASC');
+    qb = qb.orderBy('cate.sortno', 'ASC').addOrderBy('cate.title', 'ASC');
 
     const [data, total] = await qb
       .skip((page - 1) * pageSize)
@@ -161,8 +164,9 @@ export class CategoryService {
       .createQueryBuilder('cate')
       .where({
         pid: selfNode.pid,
+        sortno: LessThanOrEqual(selfNode.sortno),
       })
-      .andWhere('sortno <=: sortno', { sortno: selfNode.sortno })
+      // .andWhere('sortno <=: sortno', { sortno: selfNode.sortno })
       .orderBy('sortno', 'ASC')
       .addOrderBy('id', 'ASC')
       .limit(2)
@@ -196,8 +200,9 @@ export class CategoryService {
       .createQueryBuilder('cate')
       .where({
         pid: selfNode.pid,
+        sortno: MoreThanOrEqual(selfNode.sortno),
       })
-      .andWhere('sortno >=: sortno', { sortno: selfNode.sortno })
+      // .andWhere('sortno >=: sortno', { sortno: selfNode.sortno })
       .orderBy('sortno', 'DESC')
       .addOrderBy('id', 'DESC')
       .limit(2)
@@ -279,7 +284,7 @@ export class CategoryService {
 
     if (keywords?.trim()?.length) {
       qb = qb.andWhere(
-        'title LIKE :title OR tag LIKE :tag OR group LIKE :group',
+        '(cate.title LIKE :title OR cate.tag LIKE :tag OR cate.group LIKE :group)',
         {
           title: `%${keywords.trim()}%`,
           tag: `%${keywords.trim()}%`,
