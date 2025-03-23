@@ -1,5 +1,11 @@
 # @xtsai/system
 
+## 0.0.6
+
+### Patch Changes
+
+- feat: category nodechain
+
 ## 0.0.5
 
 ### Patch Changes
