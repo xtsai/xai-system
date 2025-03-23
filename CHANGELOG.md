@@ -1,5 +1,11 @@
 # @xtsai/system
 
+## 0.0.9
+
+### Patch Changes
+
+- Fix bug peid
+
 ## 0.0.8
 
 ### Patch Changes
