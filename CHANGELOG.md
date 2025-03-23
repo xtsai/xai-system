@@ -1,5 +1,11 @@
 # @xtsai/system
 
+## 0.0.7
+
+### Patch Changes
+
+- Fix: move node bug
+
 ## 0.0.6
 
 ### Patch Changes
