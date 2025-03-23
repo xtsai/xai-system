@@ -308,6 +308,35 @@ export class CategoryService {
     };
   }
 
+  /**
+   *
+   * @param id leaf node id
+   * @returns parent chain
+   */
+  async getTreeNodeChain(id: number): Promise<CommTreeNode[]> {
+    const nodes: Array<CommTreeNode> = [];
+    const self = await this.getById(id);
+    if (!self) return nodes;
+
+    const node = CategoryEntity.entity2TreeNode(self);
+    nodes.push(node);
+    await this.recursionParentNode(node, nodes);
+    return nodes.reverse();
+  }
+
+  private async recursionParentNode(
+    node: CommTreeNode,
+    chain: Array<CommTreeNode>,
+  ) {
+    const { pid } = node;
+    const entity = await this.getById(pid);
+    if (!entity) return null;
+
+    const parent = CategoryEntity.entity2TreeNode(entity);
+    chain.push(parent);
+    await this.recursionParentNode(parent, chain);
+  }
+
   createNo(): RandomNoType {
     return RandomUtil.randomNo36BaseTime();
   }
