@@ -167,8 +167,8 @@ export class CategoryService {
         sortno: LessThanOrEqual(selfNode.sortno),
       })
       // .andWhere('sortno <=: sortno', { sortno: selfNode.sortno })
-      .orderBy('sortno', 'ASC')
-      .addOrderBy('id', 'ASC')
+      .orderBy('sortno', 'DESC')
+      .addOrderBy('id', 'DESC')
       .limit(2)
       .getMany();
 
@@ -203,8 +203,8 @@ export class CategoryService {
         sortno: MoreThanOrEqual(selfNode.sortno),
       })
       // .andWhere('sortno >=: sortno', { sortno: selfNode.sortno })
-      .orderBy('sortno', 'DESC')
-      .addOrderBy('id', 'DESC')
+      .orderBy('sortno', 'ASC')
+      .addOrderBy('id', 'ASC')
       .limit(2)
       .getMany();
 
