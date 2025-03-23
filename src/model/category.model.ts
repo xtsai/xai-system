@@ -33,8 +33,6 @@ export class UpdateCategoryModel extends BaseCategoryModel {
   id: number;
   @IsNotEmpty()
   pid: number;
-  @IsNotEmpty()
-  peid: number;
   @IsOptional()
   uuid: number;
 }
