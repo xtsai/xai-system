@@ -1,5 +1,11 @@
 # @xtsai/system
 
+## 0.0.8
+
+### Patch Changes
+
+- Fix: sortno set
+
 ## 0.0.7
 
 ### Patch Changes
