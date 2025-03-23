@@ -83,6 +83,7 @@ export class CategoryService {
 
     const { no } = this.createNo();
 
+    const nextSortno = await this.getNextSortno(pid);
     const entity: Partial<CategoryEntity> = {
       pid,
       cateno: no,
@@ -95,6 +96,7 @@ export class CategoryService {
       path,
       url,
       richcontent,
+      sortno: nextSortno,
       remark,
     };
 
@@ -339,6 +341,21 @@ export class CategoryService {
 
   createNo(): RandomNoType {
     return RandomUtil.randomNo36BaseTime();
+  }
+
+  private async getNextSortno(pid: number): Promise<number> {
+    const { maxno } = await this.categoryRepository
+      .createQueryBuilder('cate')
+      .select('MAX(cate.sortno)', 'maxno')
+      .where({ pid })
+      .getRawOne();
+
+    let nextno = 1;
+    if (maxno) {
+      nextno = parseInt(maxno as unknown as string) + 1;
+    }
+
+    return nextno;
   }
 
   async initCategory(): Promise<string | null> {
