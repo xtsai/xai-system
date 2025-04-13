@@ -1,5 +1,11 @@
 # @xtsai/system
 
+## 0.0.11
+
+### Patch Changes
+
+- Fixed: update initialize root title Demo
+
 ## 0.0.10
 
 ### Patch Changes
