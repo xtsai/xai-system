@@ -184,14 +184,14 @@ export class DictService {
    * @param dictId number
    * @returns number or -1
    */
-  async getDictItemMaxSortno(dictId: number) {
+  async getDictItemMaxSortno(dictId: number): Promise<number> {
     const result = await this.dictItemRepository
       .createQueryBuilder('it')
       .select('MAX(it.sortno)', 'maxSortno')
       .where('it.dictId = :dictId', { dictId })
       .getRawOne();
 
-    return result?.maxSortno ?? -1;
+    return result?.maxSortno ? +result.maxSortno : -0;
   }
 
   async updateDictSortno(dto: UpdateSortnoModel) {
@@ -377,7 +377,7 @@ export class DictService {
       };
       if (extra?.length) {
         try {
-          const exObj = JSON.parse(extra);
+          const exObj = JSON.parse(extra) as unknown as Record<string, any>;
           if (Object.keys(exObj).length) {
             extraObj = {
               ...exObj,

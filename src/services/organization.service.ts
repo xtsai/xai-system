@@ -365,7 +365,7 @@ export class OrganizationService {
       );
     }
 
-    const nextCode = `${parseInt(maxCode) + 1}`;
+    const nextCode = `${parseInt(maxCode as string) + 1}`;
 
     return nextCode.padStart(
       pid === ROOT_TRRE_NODE_PID ? this.ROOT_CODE_LENGTH : this.CODE_LENGTH,
@@ -447,7 +447,7 @@ export class OrganizationService {
         OrganizationService.convertEntityToSelectTreeNode(e),
       );
 
-      this.recursiveSelectionTreeNodes(nodes[i].children);
+      void this.recursiveSelectionTreeNodes(nodes[i].children);
     }
   }
 

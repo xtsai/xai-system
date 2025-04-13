@@ -110,7 +110,9 @@ export class SysAccountLogEntity extends BaseEntity {
   })
   locked: boolean;
 
-  @Transform((row: TransformFnParams) => +new Date(row.value))
+  @Transform(
+    (row: TransformFnParams) => +new Date(row.value as string | number | Date),
+  )
   @CreateDateColumn({
     type: 'timestamp',
     nullable: false,

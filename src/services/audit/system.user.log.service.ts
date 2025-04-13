@@ -85,7 +85,7 @@ export class SysUserLogService {
   }
 
   softDelete(id: number) {
-    this.sysUserRepository.softDelete(id);
+    return this.sysUserRepository.softDelete(id);
   }
 
   static cacheToEntity(cache: AuditLogCache) {

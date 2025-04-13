@@ -85,7 +85,7 @@ export class CustomLogService {
   }
 
   softDelete(id: number) {
-    this.lotoUserRepository.softDelete(id);
+    return this.lotoUserRepository.softDelete(id);
   }
 
   static cacheToEntity(cache: AuditLogCache) {
