@@ -12,9 +12,10 @@ export default tseslint.config(
         ...globals.node,
         ...globals.jest,
       },
-      ecmaVersion: 5,
+      // ecmaVersion: 6,
       sourceType: 'module',
       parserOptions: {
+        ecmaVersion: 5,
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
@@ -36,8 +37,8 @@ export default tseslint.config(
       'build/**/*.mjs',
     ],
     rules: {
-      "prettier/prettier": "warn", 
-      "arrow-body-style": "off",
+      'prettier/prettier': 'warn',
+      'arrow-body-style': 'off',
       'no-console': ['error', { allow: ['warn', 'error'] }],
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-floating-promises': 'warn',

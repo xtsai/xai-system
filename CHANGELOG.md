@@ -1,5 +1,11 @@
 # @xtsai/system
 
+## 0.0.10
+
+### Patch Changes
+
+- Fix: fixed category init group value TreeNode
+
 ## 0.0.9
 
 ### Patch Changes
