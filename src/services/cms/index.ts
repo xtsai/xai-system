@@ -9,7 +9,7 @@ export const FirstCategory: Partial<CategoryEntity> = {
   uuid: 1000,
   icon: '',
   image: '',
-  group: 'category_root',
+  group: 'TreeNode',
   tag: 'root',
   path: '',
   url: '',
