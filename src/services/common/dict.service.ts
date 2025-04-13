@@ -163,7 +163,7 @@ export class DictService {
         remark,
         extra: extra ? JSON.stringify(extra, null, 2) : undefined,
         status: StatusEnum.NORMAL,
-        sortno: max ? parseInt(max) + 1 : 0,
+        sortno: max ? +max + 1 : 0,
       }),
     );
 
