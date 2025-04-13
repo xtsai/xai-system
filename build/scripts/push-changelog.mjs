@@ -1,4 +1,5 @@
 import { execSync } from 'child_process';
+// import pkg from '../../package.json' with {type:"json"};
 
 async function main() {
   // https://github.com/eslint/eslint/discussions/15305
